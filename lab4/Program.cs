@@ -7,24 +7,30 @@ using System.Threading.Tasks;
 namespace lab4
 {
     class Equation {
-        public double arg;
+        private double arg;
         public Equation(double A) {
             this.arg = A;
         }
 
         // точность вычисления
         const double e = 10e-5;
-        private double f(double x) {
+        private double function(double x) {
             return arg * x - Math.Cos(x);
         }
 
-        public void Solve(double a, double b) {
-            if (f(a) * f(b) > 0)
-                Console.WriteLine("Корней нет");
+        public void SolveFunction(double a, double b) {
+            if (function(a) * function(b) > 0) {
+                try {
+                    throw new Exception("Корней нет");
+                }
+                catch (Exception Exc) {
+                    Console.WriteLine($"Ошибка: {Exc.Message}");
+                }
+            }
             else {
                 double c = (a + b) / 2;
                 while (Math.Abs(b - a) >= e) {
-                    if (f(a) * f(c) < 0) b = c;
+                    if (function(a) * function(c) < 0) b = c;
                     else a = c;
                     c = (a + b) / 2;
                 }
@@ -39,19 +45,17 @@ namespace lab4
             Console.WriteLine("Исходное уравнение: ax - cos(x) = 0");
 
             Console.Write("Введите аргумент а: ");
-            double catch_a = Double.Parse(Console.ReadLine()); // 1
+            double.TryParse(Console.ReadLine(), out double catch_a);
 
             Console.Write("Введите начало интервала: ");
-            double catch_S = Double.Parse(Console.ReadLine()); // 6 
+            double.TryParse(Console.ReadLine(), out double catch_S);
 
             Console.Write("Введите конец интервала: ");
-            double catch_E = Double.Parse(Console.ReadLine()); // 10
+            double.TryParse(Console.ReadLine(), out double catch_E);
 
             Equation eq = new Equation(catch_a);
 
-            eq.Solve(catch_S, catch_E); // Корней нет
-            // eq.arg = 5;
-            //eq.Solve(-1, 1.0);
+            eq.SolveFunction(catch_S, catch_E); 
 
             Console.ReadKey();
         }
